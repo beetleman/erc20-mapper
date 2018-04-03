@@ -25,11 +25,6 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.4.0"]
                  [org.postgresql/postgresql "42.2.1"]
-                 [org.webjars.bower/tether "1.4.3"]
-                 [org.webjars/bootstrap "4.0.0-2"]
-                 [org.webjars/font-awesome "5.0.6"]
-                 [org.webjars/jquery "3.2.1"]
-                 [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [selmer "1.11.7"]]
@@ -42,10 +37,7 @@
   :target-path "target/%s/"
   :main ^:skip-aot erc20-mapper.core
 
-  :plugins [[lein-kibit "0.1.2"]
-            ;; for cider repl
-            [refactor-nrepl "2.4.0-SNAPSHOT"]
-            [cider/cider-nrepl "0.17.0-SNAPSHOT"]]
+  :plugins []
 
   :profiles
   {:uberjar {:omit-source true
@@ -62,7 +54,11 @@
                                  [prone "1.5.0"]
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
-                  :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]]
+                  :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]
+                                 [lein-kibit "0.1.2"]
+                                 ;; for cider repl
+                                 [refactor-nrepl "2.4.0-SNAPSHOT"]
+                                 [cider/cider-nrepl "0.17.0-SNAPSHOT"]]
 
                   :source-paths ["env/dev/clj"]
                   :resource-paths ["env/dev/resources"]
