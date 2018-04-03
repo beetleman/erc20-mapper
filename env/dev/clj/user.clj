@@ -14,8 +14,9 @@
   (stop)
   (start))
 
+;; raport it back
 (defn reset-db []
-  (migrations/migrate ["reset"] {:database-url (:config-database-url env)}))
+  (migrations/migrate ["reset"] (select-keys env [:database-url])))
 
 (defn migrate []
   (migrations/migrate ["migrate"] (select-keys env [:database-url])))
@@ -25,5 +26,3 @@
 
 (defn create-migration [name]
   (migrations/create name (select-keys env [:database-url])))
-
-

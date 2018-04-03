@@ -2,15 +2,14 @@ version: "2.2"
 
 services:
   build-base:
-    image: theasp/clojurescript-nodejs:latest
+    image: clojure:lein-2.8.1
     volumes:
       - ./:$PWD
     working_dir: $PWD
     environment:
       - HOST=0.0.0.0
-      - REDIS_PREFIX=balance
-      - RPC_URL=http://testrpc:8545
-      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=jdbc:postgresql://db/postgres?user=postgres&password=pass
+
 
   dev-base:
     extends:
@@ -19,7 +18,6 @@ services:
       - "7000:7000"
       - "3000:3000"
       - "9229:9229"
-    entrypoint: ./dev-entrypoint.sh
 
   test-base:
     extends:

@@ -3,6 +3,8 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
+  :local-repo "./.m2"
+;;  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
   :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
                  [cider/cider-nrepl "0.15.1"]
                  [clj-time "0.14.2"]
@@ -33,14 +35,17 @@
                  [selmer "1.11.7"]]
 
   :min-lein-version "2.0.0"
-  
+
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
   :resource-paths ["resources"]
   :target-path "target/%s/"
   :main ^:skip-aot erc20-mapper.core
 
-  :plugins [[lein-kibit "0.1.2"]]
+  :plugins [[lein-kibit "0.1.2"]
+            ;; for cider repl
+            [refactor-nrepl "2.4.0-SNAPSHOT"]
+            [cider/cider-nrepl "0.17.0-SNAPSHOT"]]
 
   :profiles
   {:uberjar {:omit-source true
@@ -58,7 +63,7 @@
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]]
-                  
+
                   :source-paths ["env/dev/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
@@ -67,4 +72,13 @@
    :project/test {:jvm-opts ["-server" "-Dconf=test-config.edn"]
                   :resource-paths ["env/test/resources"]}
    :profiles/dev {}
-   :profiles/test {}})
+   :profiles/test {}}
+
+  :repl-options
+  {:host "0.0.0.0"
+   :port 7000}
+
+  :aliases
+  {"repl-dev"   ["do"
+                 ["clean"]
+                 ["repl" ":headless"]]})

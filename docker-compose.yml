@@ -4,7 +4,7 @@ services:
   repl:
     links:
       - testrpc
-      - redis
+      - postgres:db
     extends:
       file: ./docker-compose-base.yml
       service: dev-base
@@ -16,8 +16,8 @@ services:
       service: test-base
     links:
       - testrpc
-      - redis:test-redis
-    command: lein test-watch
+      - postgres-test:db
+    command: lein test-refresh
 
   test:
     extends:
@@ -25,7 +25,7 @@ services:
       service: test-base
     links:
       - testrpc
-      - redis:test-redis
+      - postgres-test:db
     command: lein test
 
   testrpc:
@@ -35,11 +35,15 @@ services:
       - testrpc-chain:/root/.local/share/io.parity.ethereum
     command: --chain kovan --unsafe-expose --no-warp --tracing on
 
-  redis:
-    image: redis:3.2.11-alpine
+  postgres:
+    image: postgres:10.3-alpine
+    environment:
+      - POSTGRES_PASSWORD:pass
 
-  test-redis:
-    image: redis:3.2.11-alpine
+  postgres-test:
+    image: postgres:10.3-alpine
+    environment:
+      - POSTGRES_PASSWORD:pass
 
 volumes:
   testrpc-chain:
