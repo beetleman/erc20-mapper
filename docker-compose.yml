@@ -3,7 +3,6 @@ version: "2.2"
 services:
   repl:
     links:
-      - testrpc
       - postgres:db
     extends:
       file: ./docker-compose-base.yml
@@ -15,7 +14,6 @@ services:
       file: ./docker-compose-base.yml
       service: test-base
     links:
-      - testrpc
       - postgres-test:db
     command: lein test-refresh
 
@@ -24,16 +22,8 @@ services:
       file: ./docker-compose-base.yml
       service: test-base
     links:
-      - testrpc
       - postgres-test:db
     command: lein test
-
-  testrpc:
-    image: parity/parity:v1.9.5
-    cpus: 0.5
-    volumes:
-      - testrpc-chain:/root/.local/share/io.parity.ethereum
-    command: --chain kovan --unsafe-expose --no-warp --tracing on
 
   postgres:
     image: postgres:10.3-alpine
@@ -46,4 +36,4 @@ services:
       - POSTGRES_PASSWORD:pass
 
 volumes:
-  testrpc-chain:
+  jsonrpc_url-chain:

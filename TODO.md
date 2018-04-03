@@ -35,7 +35,7 @@ response
     "stateRoot": "0x65aa018c828a680ee1f6837b739c2b6de561c59d9b3a62d4d60bd3c41b2b8063",
     "step": "380688980",
     "timestamp": "0x5ac36950",
-1    "totalDifficulty": "0x63ea06000000000000000000000004853fe9c0",
+    "totalDifficulty": "0x63ea06000000000000000000000004853fe9c0",
     "transactions": [
       {
         "blockHash": "0x466baf77f35a4f1e70673c12fc2adb0219013f8ce844f95886c78c18f1160d74",

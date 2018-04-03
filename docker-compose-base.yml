@@ -9,7 +9,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - DATABASE_URL=jdbc:postgresql://db/postgres?user=postgres&password=pass
-
+      - JSONRPC_URL=https://kovan.infura.io/${INFURA_TOKEN}
 
   dev-base:
     extends:
