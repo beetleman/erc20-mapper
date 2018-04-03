@@ -1,0 +1,45 @@
+version: "2.2"
+
+services:
+  repl:
+    links:
+      - testrpc
+      - redis
+    extends:
+      file: ./docker-compose-base.yml
+      service: dev-base
+    command: lein repl-dev
+
+  test-watch:
+    extends:
+      file: ./docker-compose-base.yml
+      service: test-base
+    links:
+      - testrpc
+      - redis:test-redis
+    command: lein test-watch
+
+  test:
+    extends:
+      file: ./docker-compose-base.yml
+      service: test-base
+    links:
+      - testrpc
+      - redis:test-redis
+    command: lein test
+
+  testrpc:
+    image: parity/parity:v1.9.5
+    cpus: 0.5
+    volumes:
+      - testrpc-chain:/root/.local/share/io.parity.ethereum
+    command: --chain kovan --unsafe-expose --no-warp --tracing on
+
+  redis:
+    image: redis:3.2.11-alpine
+
+  test-redis:
+    image: redis:3.2.11-alpine
+
+volumes:
+  testrpc-chain:

@@ -1,0 +1,26 @@
+version: "2.2"
+
+services:
+  build-base:
+    image: theasp/clojurescript-nodejs:latest
+    volumes:
+      - ./:$PWD
+    working_dir: $PWD
+    environment:
+      - HOST=0.0.0.0
+      - REDIS_PREFIX=balance
+      - RPC_URL=http://testrpc:8545
+      - REDIS_URL=redis://redis:6379
+
+  dev-base:
+    extends:
+      service: build-base
+    ports:
+      - "7000:7000"
+      - "3000:3000"
+      - "9229:9229"
+    entrypoint: ./dev-entrypoint.sh
+
+  test-base:
+    extends:
+      service: build-base
