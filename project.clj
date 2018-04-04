@@ -6,10 +6,9 @@
   :local-repo "./.m2"
 ;;  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
   :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
-                 [cider/cider-nrepl "0.15.1"]
                  [clj-time "0.14.2"]
                  [compojure "1.6.0"]
-                 [conman "0.7.6"]
+                 [conman "0.7.7"]
                  [cprop "0.1.11"]
                  [funcool/struct "1.2.0"]
                  [luminus-aleph "0.1.5"]
@@ -24,7 +23,7 @@
                  [org.clojure/clojure "1.9.0"]
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.4.0"]
-                 [org.postgresql/postgresql "42.2.1"]
+                 [org.postgresql/postgresql "42.2.2"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [selmer "1.11.7"]]
@@ -51,11 +50,12 @@
 
    :project/dev  {:jvm-opts ["-server" "-Dconf=dev-config.edn"]
                   :dependencies [[pjstadig/humane-test-output "0.8.3"]
-                                 [prone "1.5.0"]
+                                 [prone "1.5.1"]
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
-                  :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                                 [lein-kibit "0.1.2"]
+                  :plugins      [[com.jakemccrary/lein-test-refresh "0.22.0"]
+                                 [lein-kibit "0.1.6"]
+                                 [lein-ancient "0.6.15"]
                                  ;; for cider repl
                                  [refactor-nrepl "2.4.0-SNAPSHOT"]
                                  [cider/cider-nrepl "0.17.0-SNAPSHOT"]]
