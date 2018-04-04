@@ -16,7 +16,11 @@
                  [luminus-nrepl "0.1.4"]
                  [luminus/ring-ttl-session "0.3.2"]
                  [markdown-clj "1.0.2"]
-                 [metosin/compojure-api "1.1.12"]
+
+                 ;; [metosin/compojure-api "1.1.12"]
+                 [metosin/spec-tools "0.6.1"]
+                 [metosin/compojure-api "2.0.0-alpha19"]
+
                  [metosin/muuntaja "0.5.0"]
                  [metosin/ring-http-response "0.9.0"]
                  [mount "0.1.12"]
