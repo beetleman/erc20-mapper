@@ -30,7 +30,7 @@
                  [org.postgresql/postgresql "42.2.2"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
-                 [selmer "1.11.7"]]
+                 [cheshire "5.8.0"]]
 
   :min-lein-version "2.0.0"
 
@@ -54,7 +54,6 @@
 
    :project/dev  {:jvm-opts ["-server" "-Dconf=dev-config.edn"]
                   :dependencies [[pjstadig/humane-test-output "0.8.3"]
-                                 [prone "1.5.1"]
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.22.0"]

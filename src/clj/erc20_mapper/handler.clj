@@ -4,7 +4,14 @@
             [compojure.route :as route]
             [erc20-mapper.env :refer [defaults]]
             [mount.core :as mount]
+            [manifold.deferred :as d]
             [erc20-mapper.middleware :as middleware]))
+
+(defn ring->aleph [handler]
+  (fn [request]
+    (let [response (d/deferred)]
+      (handler request #(d/success! response %) #(d/error! response %))
+      response)))
 
 (mount/defstate init-app
   :start ((or (:init defaults) identity))
@@ -12,8 +19,8 @@
 
 (mount/defstate app
   :start
-  (middleware/wrap-base
+  (ring->aleph
+   (middleware/wrap-base
     (routes
-          #'service-routes
-      (route/not-found
-        "page not found"))))
+     #'service-routes
+     (route/not-found "page not found")))))
