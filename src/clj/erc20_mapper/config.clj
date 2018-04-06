@@ -10,3 +10,6 @@
     [(args)
      (source/from-system-props)
      (source/from-env)]))
+
+(defstate jsonrpc-url
+  :start (:jsonrpc-url env))
