@@ -5,6 +5,8 @@
             [clojure.tools.logging :as log]
             [erc20-mapper.config :refer [jsonrpc-url]]))
 
+;; Utils
+
 (defn without-0x [s]
   (clojure.string/replace s #"^0x" ""))
 
@@ -20,6 +22,18 @@
               :content-type :json
               :as           :json}))
 
+(defn request
+  ([method]
+   (request method []))
+  ([method params]
+   {"jsonrpc" "2.0"
+    "method"  method
+    "params"  params
+    "id"      1}))
+
+
+;; Protocols & Records
+
 (defprotocol SendAsync
   (-send [_]))
 
@@ -29,15 +43,6 @@
     (d/chain
       (send-request request)
       handler)))
-
-(defn request
-  ([method]
-   (request method []))
-  ([method params]
-   {"jsonrpc" "2.0"
-    "method"  method
-    "params"  params
-    "id"      1}))
 
 (defn- blockNumberDesc []
   (->MethodDesc (request "eth_blockNumber")
