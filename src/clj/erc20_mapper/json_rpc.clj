@@ -14,6 +14,9 @@
   (Integer/parseInt (without-0x s)
                     16))
 
+(defn int->hex [i]
+  (str "0x" (Integer/toHexString i)))
+
 (defn send-request
   [request]
   (http/post jsonrpc-url
@@ -31,6 +34,8 @@
     "params"  params
     "id"      1}))
 
+(defn get-result [response]
+  (get-in response [:body :result]))
 
 ;; Protocols & Records
 
@@ -41,15 +46,28 @@
   SendAsync
   (-send [_]
     (d/chain
-      (send-request request)
-      handler)))
+     (send-request request)
+     get-result
+     handler)))
 
 (defn- blockNumberDesc []
   (->MethodDesc (request "eth_blockNumber")
-                #(-> %
-                 :body
-                 :result
-                 hex->int)))
+                hex->int))
 
 (defn blockNumber []
   (-send (blockNumberDesc)))
+
+(defn- getBlockByNumberDesc [blockNumber]
+  (->MethodDesc (request "eth_getBlockByNumber" [(int->hex blockNumber) true])
+                identity))
+
+(defn getBlockByNumber [blockNumber]
+  (-send (getBlockByNumberDesc blockNumber)))
+
+
+(defn getTransactionReceiptDesc [txHash]
+  (->MethodDesc (request "eth_getTransactionReceipt" [txHash])
+                identity))
+
+(defn getTransactionReceipt [txHash]
+  (-send (getTransactionReceiptDesc txHash)))

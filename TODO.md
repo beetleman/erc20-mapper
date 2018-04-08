@@ -1,4 +1,4 @@
-- [ ] get transactions
+- [x] get transactions
 
 call
 
@@ -66,7 +66,7 @@ response
 }
 ```
 
-- [ ] get transaction from block
+- [x] get transaction from block
 
 
 call
@@ -180,7 +180,7 @@ resonse
   "id": 1
 }
 ```
-
+- [ ] get all transactions recipt form block
 - [ ] detect block delections using `parentHash`
 - [ ] encode erc20 token events
 - [ ] if topic match ^ save user address
