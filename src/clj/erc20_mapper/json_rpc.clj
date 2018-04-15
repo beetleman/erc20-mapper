@@ -1,21 +1,11 @@
 (ns erc20-mapper.json-rpc
   (:require [aleph.http :as http]
             [cheshire.core :as json]
-            [manifold.deferred :as d]
-            [clojure.tools.logging :as log]
-            [erc20-mapper.config :refer [jsonrpc-url]]))
+            [erc20-mapper.config :refer [jsonrpc-url]]
+            [erc20-mapper.json-rpc.conversions :as conversions]
+            [manifold.deferred :as d]))
 
 ;; Utils
-
-(defn without-0x [s]
-  (clojure.string/replace s #"^0x" ""))
-
-(defn hex->int [s]
-  (Integer/parseInt (without-0x s)
-                    16))
-
-(defn int->hex [i]
-  (str "0x" (Integer/toHexString i)))
 
 (defn send-request
   [request]
@@ -52,13 +42,13 @@
 
 (defn- blockNumberDesc []
   (->MethodDesc (request "eth_blockNumber")
-                hex->int))
+                conversions/hex->int))
 
 (defn blockNumber []
   (-send (blockNumberDesc)))
 
 (defn- getBlockByNumberDesc [blockNumber]
-  (->MethodDesc (request "eth_getBlockByNumber" [(int->hex blockNumber) true])
+  (->MethodDesc (request "eth_getBlockByNumber" [(conversions/int->hex blockNumber) true])
                 identity))
 
 (defn getBlockByNumber [blockNumber]

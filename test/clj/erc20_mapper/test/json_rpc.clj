@@ -2,24 +2,6 @@
   (:require [clojure.test :refer :all]
             [erc20-mapper.json-rpc :as json-rpc]))
 
-(deftest test-without-0x
-  (testing "if remove 0x if exist"
-    (is (= (json-rpc/without-0x "0x1fa")
-           "1fa")))
-  (testing "pass string without 0x"
-    (is (= (json-rpc/without-0x "1fa")
-           "1fa"))))
-
-(deftest test-hex->int
-  (testing "converting hex string to integer"
-    (is (= (json-rpc/hex->int "0x11")
-           17))))
-
-(deftest test-int->hex
-  (testing "converting integer to hex string"
-    (is (= (json-rpc/int->hex 15)
-           "0xf"))))
-
 (deftest test-request
   (let [method "fakeMethod"
         params ["fakeParam_1" "fakeParam_2"]]
@@ -45,7 +27,7 @@
               "params"  []
               "id"      1})))
     (testing "handler"
-      (is (= (handler "0xa")
+      (is (= (handler "0x00000000000000000000000000000000000000000000000000000000000a")
              10)))))
 
 (deftest test-getBlockByNumber
@@ -54,7 +36,7 @@
       (is (= request
              {"jsonrpc" "2.0"
               "method"  "eth_getBlockByNumber"
-              "params"  ["0x1" true]
+              "params"  ["0x000000000000000000000000000000000000000000000000000000000001" true]
               "id"      1})))
     (testing "handler"
       (is (= (handler :fake-body)
