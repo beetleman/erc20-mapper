@@ -3,29 +3,44 @@
             [erc20-mapper.json-rpc.decode :as decode]))
 
 ;; https://github.com/pelle/cloth/blob/838189da152f4112065a8a9db0b4b7663947b97c/src/cloth/util.cljc#L489
-(def log {:address             "0xc2ce67affc8bf3e6bdb87be40dc104addb5f66a4"
-          :transactionHash     "0x08c9bef894e1e5a4ea129043954f69b9ffd8ccf0a155ea43b861fb7bc7c69683"
-          :blockHash           "0x9c512510eedf6699f87293577a74409b0209ebc6be1da3cb75d519d33949c8a1"
-          :transactionLogIndex "0x0"
-          :type                "mined"
-          :transactionIndex    0
-          :topics              [;; hash of parametrs of event
-                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                                ;; data of first indexed parametr, decode by re
+;; mainnet transaction: 0xf0f8156f8843e89d2990751b131a4f9209d987e34b73cd7dc13b8752d9165b37
+;; EOS Token
+(def log-data "0x000000000000000000000000000000000000000000000000f2565fdb2510a000")
+(def indexed-topic-1 "0x000000000000000000000000f3e36ad56aa85abdacc18c02d19509ae4f7d5899")
+(def indexed-topic-2 "0x00000000000000000000000009390040090e625ad2592f99bd58f1521896543c")
+(def log {:address          "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0"
+          :transactionHash  "0xf0f8156f8843e89d2990751b131a4f9209d987e34b73cd7dc13b8752d9165b37"
+          :blockHash        "0x04f4d0df1d27c4606c88e78800e8b288b9099cc1afaae1082dff82304770d468"
+          :transactionIndex 137
+          :topics           ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                             indexed-topic-1
+                             indexed-topic-2]
+          :blockNumber      5520487
+          :logIndex         131
+          :removed          false
+          :data             log-data})
 
-                                ;; data of second indexed parapetr
-                                "0x000000000000000000000000ef59cb8748e54ea2a7aaa0699430271000000000"]
-          :blockNumber 139530
-          :logIndex    0
-          ;; data of all not indexed parameters, paded to 64
-          :data        "0x00000000000000000000000000000000000000000000000000000000000002f2"})
-
-(deftest test-eth-data
+(deftest test-eth-data-chunk
   (testing "uint256"
-    (is (= [754]
-           (decode/eth-data [:uint256]
-                            "0x00000000000000000000000000000000000000000000000000000000000002f2"))))
+    (is (= {:decoded 17462250000000000000
+            :data    ""}
+           (decode/eth-data-chunk :uint256
+                                  log-data))))
   (testing "address"
-    (is (= ["00a329c0648769a73afac7f9381e08fb43dbea72"]
-           (decode/eth-data [:address]
-                            "0x00000000000000000000000000a329c0648769a73afac7f9381e08fb43dbea72")))))
+    (is (= {:decoded "0xf3e36ad56aa85abdacc18c02d19509ae4f7d5899"
+            :data    ""}
+           (decode/eth-data-chunk :address
+                                  indexed-topic-1)))))
+
+(deftest test-event-log
+  (testing "EOS event `Transfer(address indexed from, address indexed to, uint256 value)`"
+    (is (= ["0xf3e36ad56aa85abdacc18c02d19509ae4f7d5899"
+            "0x09390040090e625ad2592f99bd58f1521896543c"
+            17462250000000000000]
+           (decode/event-log [{:type    :address
+                               :indexed true}
+                              {:type    :address
+                               :indexed true}
+                              {:type    :uint256
+                               :indexed false}]
+                             log)))))

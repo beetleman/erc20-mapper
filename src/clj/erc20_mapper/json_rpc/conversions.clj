@@ -6,6 +6,11 @@
 (defn without-0x [s]
   (clojure.string/replace s #"^0x" ""))
 
+(defn with-0x [s]
+  (if (clojure.string/starts-with? s "0x")
+    s
+    (str "0x" s)))
+
 (defn hex->int [s]
   (BigInteger. (without-0x s) 16))
 

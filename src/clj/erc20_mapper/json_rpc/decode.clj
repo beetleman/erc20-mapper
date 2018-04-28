@@ -2,7 +2,7 @@
   (:require [erc20-mapper.json-rpc.conversions :as conversions]))
 
 (def address {:memory  [20 :bytes]
-              :decoder identity})
+              :decoder conversions/with-0x})
 (def uint256 {:memory  [256 :bits]
               :decoder conversions/hex->int})
 (def types {:address address
@@ -30,10 +30,29 @@
     [(subs (subs data 0 split-at) padding)
      (subs data split-at)]))
 
-(defn eth-data [[type-kw & types-kw] data]
-  (when type-kw
-    (let [data         (conversions/without-0x data)
-          type         (keyword->type type-kw)
-          [chunk data] (get-data-chunk type data)
-          decoded      (decode type chunk)]
-      (lazy-seq (cons decoded (eth-data types-kw data))))))
+(defn eth-data-chunk [type-kw data]
+  (let [data         (conversions/without-0x data)
+        type         (keyword->type type-kw)
+        [chunk data] (get-data-chunk type data)
+        decoded      (decode type chunk)]
+    {:data    data
+     :decoded decoded}))
+
+(defn- -event-data [[{type-kw :type indexed :indexed} & abi] data indexed-data]
+  (lazy-seq
+   (cond
+     (nil? type-kw)
+     nil
+
+     indexed
+     (cons (:decoded (eth-data-chunk type-kw (first indexed-data)))
+           (-event-data abi data (rest indexed-data)))
+
+     :default
+     (let [{:keys [decoded data]} (eth-data-chunk type-kw data)]
+       (cons decoded
+             (-event-data abi data indexed-data))))))
+(defn event-log [abi log]
+  (let [{[_ & indexed-data] :topics
+         data :data} log]
+    (-event-data abi data indexed-data)))

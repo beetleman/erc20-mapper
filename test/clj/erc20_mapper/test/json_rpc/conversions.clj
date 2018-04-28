@@ -10,6 +10,14 @@
     (is (= (conversions/without-0x "1fa")
            "1fa"))))
 
+(deftest test-with-0x
+  (testing "pass string with 0x"
+    (is (= (conversions/with-0x "0x1fa")
+           "0x1fa")))
+  (testing "add 0x if string without 0x"
+    (is (= (conversions/with-0x "1fa")
+           "0x1fa"))))
+
 (deftest test-hex->int
   (testing "converting hex string to integer"
     (is (= (conversions/hex->int "0x000000000000000000000000000000000000000000000000000000000011")
