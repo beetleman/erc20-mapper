@@ -38,7 +38,7 @@
     {:data    data
      :decoded decoded}))
 
-(defn- -event-data [[{type-kw :type indexed :indexed} & abi] data indexed-data]
+(defn- log-data [[{type-kw :type indexed :indexed} & abi] data indexed-data]
   (lazy-seq
    (cond
      (nil? type-kw)
@@ -46,13 +46,13 @@
 
      indexed
      (cons (:decoded (eth-data-chunk type-kw (first indexed-data)))
-           (-event-data abi data (rest indexed-data)))
+           (log-data abi data (rest indexed-data)))
 
      :default
      (let [{:keys [decoded data]} (eth-data-chunk type-kw data)]
        (cons decoded
-             (-event-data abi data indexed-data))))))
+             (log-data abi data indexed-data))))))
 (defn event-log [abi log]
   (let [{[_ & indexed-data] :topics
          data :data} log]
-    (-event-data abi data indexed-data)))
+    (log-data abi data indexed-data)))

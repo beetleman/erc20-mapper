@@ -30,7 +30,10 @@
                  [org.postgresql/postgresql "42.2.2"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
-                 [cheshire "5.8.0"]]
+                 [cheshire "5.8.0"]
+                 [org.clojure/test.check "0.9.0"]
+                 [metosin/spec-tools "0.6.1"]
+                 [com.gfredericks/test.chuck "0.2.9"]]
 
   :min-lein-version "2.0.0"
 
